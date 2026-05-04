@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIBPlan - Planificador d'Horaris</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <h1>FIBPlan</h1>
+                <p>Planificador de l'Enginyeria Informàtica</p>
+            </header>
+            
+            <section class="subject-selection">
+                <div class="search-box">
+                    <input type="text" id="subject-search" placeholder="Afegir assignatura...">
+                    <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                </div>
+                
+                <div id="subject-list" class="subject-tree">
+                    <!-- Subjects will be injected here -->
+                    <div class="loading-skeleton"></div>
+                </div>
+            </section>
+            
+            <section class="filters">
+                <h3>Preferències</h3>
+                <div class="filter-group">
+                    <label>Hora d'inici mínima</label>
+                    <input type="number" id="min-start" min="8" max="21" value="8">
+                </div>
+                <div class="filter-group">
+                    <label>Hora de fi màxima</label>
+                    <input type="number" id="max-end" min="8" max="21" value="21">
+                </div>
+            </section>
+            
+            <section class="comments-section">
+                <h3>Comentaris i Notes</h3>
+                <textarea id="user-comments" placeholder="Escriu les teves notes aquí..."></textarea>
+            </section>
+            
+            <footer class="sidebar-footer">
+                <button id="export-btn" class="btn btn-secondary">Exportar</button>
+                <button id="clear-btn" class="btn btn-danger">Netejar</button>
+            </footer>
+        </aside>
+
+        <main class="main-content">
+            <div class="timetable-header">
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Assignatures:</span>
+                        <span id="stat-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Hores totals:</span>
+                        <span id="stat-hours">0h</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Gaps:</span>
+                        <span id="stat-gaps">0h</span>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button id="toggle-dark-mode" class="icon-btn" title="Canviar mode">
+                        <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="timetable-container">
+                <div id="timetable-grid" class="timetable-grid">
+                    <!-- Grid headers and slots will be injected here -->
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js" type="module"></script>
+</body>
+</html>
