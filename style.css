@@ -8,9 +8,11 @@
     --accent-purple: #a855f7;
     --accent-orange: #fb923c;
     --accent-red: #f43f5e;
-    --border: rgba(255, 255, 255, 0.1);
-    --glass: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.08);
+    --glass: rgba(255, 255, 255, 0.04);
+    --glass-heavy: rgba(255, 255, 255, 0.1);
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -30,7 +32,9 @@ body {
 .app-container {
     display: flex;
     height: 100vh;
+    height: 100dvh;
     width: 100vw;
+    overflow: hidden;
 }
 
 /* Sidebar Styling */
@@ -330,11 +334,27 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-    background: var(--glass);
+    background: var(--glass-heavy);
     padding: 1rem 1.5rem;
     border-radius: 16px;
     border: 1px solid var(--border);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-lg);
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: white;
+}
+
+.menu-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor;
 }
 
 .stats {
@@ -368,6 +388,7 @@ body {
     padding: 1rem;
     overflow: auto;
     position: relative;
+    -webkit-overflow-scrolling: touch; /* Momentum scroll for iOS */
 }
 
 .timetable-grid {
@@ -478,24 +499,27 @@ body {
 }
 
 .btn-secondary {
-    background: var(--glass);
+    background: var(--glass-heavy);
     color: white;
     border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .btn-danger {
-    background: rgba(244, 63, 94, 0.1);
+    background: rgba(244, 63, 94, 0.15);
     color: var(--accent-red);
     border: 1px solid rgba(244, 63, 94, 0.2);
 }
 
 .btn-danger:hover {
-    background: var(--accent-red);
-    color: white;
+    background: rgba(244, 63, 94, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.2);
 }
 
 .btn-primary {
@@ -541,4 +565,198 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary);
+}
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.sidebar-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        left: -320px;
+        top: 0;
+        bottom: 0;
+        z-index: 1001;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 300px;
+        max-width: 80vw;
+    }
+
+    .sidebar.open {
+        transform: translateX(320px);
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .main-content {
+        padding: 0.75rem;
+    }
+
+    .timetable-header {
+        padding: 0.6rem 0.75rem;
+        border-radius: 12px;
+        margin-bottom: 0.75rem;
+    }
+
+    .day-selector {
+        margin-bottom: 0.75rem;
+    }
+
+    .stats {
+        gap: 1rem;
+    }
+
+    .stat-item span:last-child {
+        font-size: 0.9rem;
+    }
+
+    .timetable-container {
+        border-radius: 12px;
+        padding: 0.5rem;
+    }
+
+    .timetable-grid {
+        min-width: 550px; /* Smaller min-width on mobile */
+        grid-template-columns: 45px repeat(5, 1fr);
+    }
+
+    .grid-header {
+        font-size: 0.7rem;
+    }
+
+    .time-label {
+        font-size: 0.65rem;
+        padding-right: 5px;
+    }
+
+    .slot {
+        padding: 4px 6px;
+        font-size: 0.65rem;
+        border-radius: 6px;
+    }
+
+    .slot-name {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        flex-direction: row;
+        gap: 4px;
+        align-items: baseline;
+    }
+
+    .stat-label {
+        font-size: 0.6rem;
+    }
+
+    .stat-item span:last-child {
+        font-size: 0.8rem;
+    }
+}
+
+/* Day Selector for Mobile */
+.day-selector {
+    display: none;
+    background: var(--bg-card);
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    padding: 4px;
+    border: 1px solid var(--border);
+    gap: 4px;
+}
+
+.day-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.6rem 0;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.day-tab.active {
+    background: var(--accent-cyan);
+    color: var(--bg-dark);
+}
+
+@media (max-width: 650px) {
+    .day-selector {
+        display: flex;
+    }
+
+    .timetable-grid {
+        min-width: 100% !important;
+        grid-template-columns: 35px 1fr !important; /* Extremely narrow time column */
+    }
+
+    .time-label {
+        font-size: 0.6rem;
+        padding-right: 3px;
+        justify-content: center; /* Center hours for better look when narrow */
+    }
+    .timetable-grid .grid-header {
+        display: none;
+    }
+
+    /* Hide all cells by default on mobile */
+    .timetable-grid .grid-cell {
+        display: none;
+    }
+
+    /* Show headers and cells for active day only */
+    /* We use JS to set a class like 'show-day-0' on the grid */
+    .timetable-grid.show-day-0 .grid-header:nth-child(2),
+    .timetable-grid.show-day-0 .grid-cell[data-day="0"] { display: flex; }
+    
+    .timetable-grid.show-day-1 .grid-header:nth-child(3),
+    .timetable-grid.show-day-1 .grid-cell[data-day="1"] { display: flex; }
+
+    .timetable-grid.show-day-2 .grid-header:nth-child(4),
+    .timetable-grid.show-day-2 .grid-cell[data-day="2"] { display: flex; }
+
+    .timetable-grid.show-day-3 .grid-header:nth-child(5),
+    .timetable-grid.show-day-3 .grid-cell[data-day="3"] { display: flex; }
+
+    .timetable-grid.show-day-4 .grid-header:nth-child(6),
+    .timetable-grid.show-day-4 .grid-cell[data-day="4"] { display: flex; }
+
+    /* Always show time labels */
+    .timetable-grid .time-label {
+        display: flex;
+    }
+    
+    /* Show the top left corner if needed, or just let it be */
+    .timetable-grid .grid-header:first-child {
+        display: flex;
+    }
 }

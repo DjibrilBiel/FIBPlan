@@ -55,6 +55,23 @@ function init() {
         exportBtn.addEventListener('click', exportToImage);
     }
 
+    // Mobile Menu Toggles
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    const sidebar = document.querySelector('.sidebar');
+
+    if (menuToggle && sidebarOverlay) {
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('visible');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('visible');
+        });
+    }
+
     // Force API load if cache is empty or if it's the old cache (missing categories array)
     if (SUBJECTS.length === 0 || !SUBJECTS[0].categories) {
         loadFIBData();
@@ -690,6 +707,29 @@ function clearAll() {
         updateTimetable();
     }
 }
+
+// Mobile Day Selector Logic
+window.setMobileDay = (dayIdx) => {
+    const grid = document.getElementById('timetable-grid');
+    const tabs = document.querySelectorAll('.day-tab');
+    
+    // Update grid class
+    for (let i = 0; i < 5; i++) {
+        grid.classList.remove(`show-day-${i}`);
+    }
+    grid.classList.add(`show-day-${dayIdx}`);
+    
+    // Update active tab
+    tabs.forEach((tab, i) => {
+        tab.classList.toggle('active', i === dayIdx);
+    });
+};
+
+// Initialize mobile view with Monday
+document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('timetable-grid');
+    if (grid) grid.classList.add('show-day-0');
+});
 
 function exportToImage() {
     alert("Funcionalitat d'exportació en desenvolupament. Pots fer una captura de pantalla de moment!");
